@@ -5,6 +5,8 @@ DOMAIN=$1
 APP_NAME=$2
 EMAIL=$3
 DB_NAME=$2-mysql
+MYSQL_ROOT_PASSWORD=""
+
 
 mvn package
 
@@ -25,6 +27,8 @@ dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL="$EMAIL"
 dokku letsencrypt $APP_NAME
 dokku letsencrypt:auto-renew $APP_NAME
 setup_dokku
+
+/var/lib/dokku/services/mysql/
 
 git remote add dokku dokku@"$DOMAIN":"$APP_NAME"
 [[ $? -eq 0 ]] && echo 'Dokku git remote created. Commit the Procfile and system.properties file and run git push dokku master.'

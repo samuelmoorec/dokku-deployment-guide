@@ -3,7 +3,7 @@
 # ./deploy.sh example.com example
 DOMAIN=$1
 APP_NAME=$2
-DB_NAME=$2-mysql
+DB_NAME=$2_db
 MYSQL_ROOT_PASSWORD=""
 
 ssh root@"$DOMAIN" bash <<setup_dokku

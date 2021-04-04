@@ -89,4 +89,7 @@ server is to do the following
 6. Click the "Create Record" button
 ## Deploy your application
 
-we have created a simple script to deploy your applications to your server using dokku
+we have created a simple script to deploy your applications to your server using dokku. To deploy your application run the following command in your project's integrated terminal.
+```
+bash -c "$(curl -sS https://raw.githubusercontent.com/samuelmoorec/dokku-deployment-guide/master/deploy.sh)"
+```

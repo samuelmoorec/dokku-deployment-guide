@@ -21,7 +21,9 @@ dokku apps:create $APP_NAME
 dokku mysql:create $DB_NAME
 dokku mysql:link $DB_NAME $APP_NAME
 dokku domains:add $APP_NAME $DOMAIN
-dokku domains:remove $APP_NAME $APP_NAME
+dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL="$EMAIL"
+dokku letsencrypt $APP_NAME
+dokku letsencrypt:auto-renew $APP_NAME
 setup_dokku
 
 git remote add dokku dokku@"$DOMAIN":"$APP_NAME"
@@ -30,22 +32,3 @@ git add Procfile system.properties
 git commit -m "feat: Add Procfile and system.properties for deployment"
 git push dokku master
 
-#Need to set email address
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL="$EMAIL"
-ssh root@"$DOMAIN" bash <<setup_dokku
-dokku letsencrypt $APP_NAME
-dokku letsencrypt:auto-renew $APP_NAME
-setup_dokku
-
-Help()
-{
-echo "Add description of the script functions here."
-echo
-echo "Syntax: scriptTemplate [-g|h|v|V]"
-   echo "options:"
-   echo "g     Print the GPL license notification."
-   echo "h     Print this Help."
-   echo "v     Verbose mode."
-   echo "V     Print software version and exit."
-   echo
-}

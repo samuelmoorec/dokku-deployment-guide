@@ -9,7 +9,7 @@ DB_NAME=$2-mysql
 mvn package
 
 echo "java.runtime.version=11" > system.properties
-[[ $? -eq 0 ]] echo "system.properties created"
+[[ $? -eq 0 ]] && echo "system.properties created"
 
 echo "web: env java -jar `ls target/*.jar`" > Procfile
 [[ $? -eq 0 ]] && echo "Procfile created"

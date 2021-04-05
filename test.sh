@@ -4,11 +4,17 @@
 DOMAIN=$1
 APP_NAME=$2
 DB_NAME=$2_db
-MYSQL_ROOT_PASSWORD=""
 
-ssh root@"$DOMAIN" bash <<setup_dokku
-MYSQL_ROOT_PASSWORD=cat /var/lib/dokku/services/mysql/${APP_NAME}/ROOTPASSWORD
-setup_dokku
+#ssh root@${DOMAIN} bash <<setup_dokku
+#pwd
+#cd /var/lib/dokku/services/mysql/${DB_NAME}
+#pwd
+#ls
+#cat ROOTPASSWORD
+#MYSQL_ROOT_PASSWORD=$(< ROOTPASSWORD)
+#setup_dokku
 
-echo ${MYSQL_ROOT_PASSWORD}
+MYSQL_ROOT_PASSWORD=$(ssh root@${DOMAIN} cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD)
+
+echo $MYSQL_ROOT_PASSWORD
 

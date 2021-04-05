@@ -16,6 +16,7 @@ echo "web: env java -jar `ls target/*.jar`" > Procfile
 [[ $? -eq 0 ]] && echo "Procfile created"
 
 ssh root@$IPADDRESS bash << setup_dokku
+echo hello
 dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
 dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
 dokku apps:create $APP_NAME

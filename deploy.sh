@@ -15,7 +15,9 @@ echo "java.runtime.version=11" > system.properties
 echo "web: env java -jar `ls target/*.jar`" > Procfile
 [[ $? -eq 0 ]] && echo "Procfile created"
 
-ssh root@$IP bash <<setup_dokku
+echo ssh root@$IP cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD
+
+ssh root@$IP << setup_dokku
 dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
 dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
 dokku apps:create $APP_NAME
@@ -27,7 +29,7 @@ dokku letsencrypt $APP_NAME
 dokku letsencrypt:auto-renew $APP_NAME
 setup_dokku
 
-MYSQL_ROOT_PASSWORD=$(ssh root@${DOMAIN} cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD)
+MYSQL_ROOT_PASSWORD=$(ssh root@${IP} cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD)
 
 git remote add dokku dokku@$DOMAIN:$APP_NAME
 [[ $? -eq 0 ]] && echo "Dokku git remote created. Commit the Procfile and system.properties file and run git push dokku master."

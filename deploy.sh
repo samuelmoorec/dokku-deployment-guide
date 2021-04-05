@@ -5,6 +5,7 @@ DOMAIN=$1
 APP_NAME=$2
 EMAIL=$3
 DB_NAME=$2-mysql
+IP=$4
 
 mvn package
 
@@ -14,7 +15,7 @@ echo "java.runtime.version=11" > system.properties
 echo "web: env java -jar `ls target/*.jar`" > Procfile
 [[ $? -eq 0 ]] && echo "Procfile created"
 
-ssh root@$DOMAIN bash <<setup_dokku
+ssh root@$IP bash <<setup_dokku
 dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
 dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
 dokku apps:create $APP_NAME

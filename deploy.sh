@@ -6,12 +6,12 @@ APP_NAME=$2
 EMAIL=$3
 DB_NAME=$2-mysql
 
-mvn package
+mvn packaged
 
 echo "java.runtime.version=11" > system.properties
 [[ $? -eq 0 ]] echo 'system.properties created'
 
-echo "web: env SPRING_DATASOURCE_URL=\$JDBC_DATABASE_URL SPRING_JPA_HIBERNATE_DDL-AUTO=update SPRING_JPA_SHOW-SQL=true SERVER_PORT=\$PORT java -jar `ls target/*.jar`" > Procfile
+echo "web: env java -jar `ls target/*.jar`" > Procfile
 [[ $? -eq 0 ]] && echo 'Procfile created'
 
 ssh root@$DOMAIN bash <<setup_dokku
@@ -20,8 +20,8 @@ dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
 dokku apps:create $APP_NAME
 dokku mysql:create $DB_NAME
 dokku mysql:link $DB_NAME $APP_NAME
+dokku config:set --no-restart "$APP_NAME" SPRING_DATASOURCE_URL=$JDBC_DATABASE_URL SPRING_JPA_HIBERNATE_DDL-AUTO=update SPRING_JPA_SHOW-SQL=true SERVER_PORT=$PORT DOKKU_LETSENCRYPT_EMAIL=$EMAIL
 dokku domains:add $APP_NAME $DOMAIN
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL
 dokku letsencrypt $APP_NAME
 dokku letsencrypt:auto-renew $APP_NAME
 setup_dokku

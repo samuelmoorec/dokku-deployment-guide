@@ -82,3 +82,6 @@ Here is an example below.
 dokku mysql:help
 ```
 If that does not help you can find the plugin's official documentation [here](https://github.com/dokku/dokku-mysql#readme)
+
+### Home Menu
+Click here to go to [menu](https://github.com/samuelmoorec/dokku-deployment-guide)

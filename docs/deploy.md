@@ -70,5 +70,5 @@ server is to do the following
 
 we have created a simple script to deploy your applications to your server using dokku. To deploy your application run the following command in your project's integrated terminal after **switching** out the **domain**, **appname**, and **email** with your own.
 ```
-bash <(curl -sS https://raw.githubusercontent.com/samuelmoorec/dokku-deployment-guide/master/deploy.sh) <YourDomain.com> <AppName> <youremail@example.com> <server_ip_address>
+bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/deploy.sh) <YourDomain.com> <AppName> <youremail@example.com> <server_ip_address>
 ```

@@ -9,7 +9,7 @@ For this guide we will be using [NameCheap](https://www.namecheap.com/) to setup
 3. Navigate to your [Domain List](https://ap.www.namecheap.com/domains/list/) on namecheap
 4. Select the **MANAGE** button on the domain you wish to use for this project
 5. Under **NAMESERVERS** switch ***NameCheap BasicDNS*** to ***Custom DNS***
-6. Enter in the following server names
+6. Enter the following server names
 
 ```
         ns1.digitalocean.com
@@ -55,7 +55,7 @@ This process will cause all requests for your domain to go to your server.
    default)
 4. For the hostname, enter `@`
 5. For "will direct to", choose your droplet
-6. Leave the default TTL
+6. Set TTL to 60
 7. Click the "Create Record" button
 ### Configure Subdomains
 A simple way to have any and all subdomain requests go to the same place as your
@@ -64,7 +64,7 @@ server is to do the following
 2. Choose "CNAME" for the record type
 3. For "Hostname", enter `*`
 4. For "Is an Alias Of", enter `@`
-5. Leave the default TTL
+5. Set TTL to 60
 6. Click the "Create Record" button
 ## Deploy your application
 

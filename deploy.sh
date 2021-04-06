@@ -9,8 +9,8 @@ IPADDRESS=$4
 mvn package
 echo "java.runtime.version=11" > system.properties
 [[ $? -eq 0 ]] && echo "system.properties created"
-echo "web: env java -jar `ls target/*.jar`" > Procfile
-[[ $? -eq 0 ]] && echo "Procfile created"
+#echo "web: env java -jar `ls target/*.jar`" > Procfile
+#[[ $? -eq 0 ]] && echo "Procfile created"
 
 ssh root@$IPADDRESS bash << setup_dokku
 dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
@@ -31,6 +31,6 @@ setup_dokku
 git remote add dokku dokku@$IPADDRESS:$APP_NAME
 [[ $? -eq 0 ]] && echo "Dokku git remote created. Commit the Procfile and system.properties file and run git push dokku master."
 git add Procfile system.properties
-#git commit -m "feat: Add Procfile and system.properties for deployment"
-#git push dokku master
+git commit -m "feat: Add Procfile and system.properties for deployment"
+git push dokku master
 

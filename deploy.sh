@@ -7,7 +7,7 @@ EMAIL=$3
 DB_NAME=$2-mysql
 IPADDRESS=$4
 
-
+echo "TESTING MAVEN project..."
 mvn package
 if [ $? -ne 0 ]; then
     echo "mvn package -> FAILED"
@@ -16,6 +16,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo "Checking for system.properties file..."
 if [ -f system.properties ];
   then
     echo "system.properties file found"
@@ -25,6 +26,8 @@ if [ -f system.properties ];
 fi
 
 echo "Connecting to Server..."
+echo "You may be prompted to verify if you would like to continue connecting to the server."
+echo "If prompted to continue type 'yes'."
 
 ssh root@$IPADDRESS bash << setup_dokku
 

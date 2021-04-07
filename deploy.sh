@@ -7,6 +7,29 @@ EMAIL=$3
 DB_NAME=$2-mysql
 IPADDRESS=$4
 
+# Verifies that app name is a valid name and wont cause failures later.
+if [[ ! ($APP_NAME =~ ^[a-z_]+$) ]] || [[ ! ($APP_NAME =~ ^[a-z].*)  ]]; then
+    echo "App name must start with a lowercase letter and can only consist of lowercase letters and underscores."
+    echo "Please review your app name and run the command again."
+    echo "Exiting..."
+    exit 1
+fi
+
+# Verifies that the email is a valid email.
+if [[ ! ($EMAIL =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$) ]]
+then
+    echo "Please check your email to make sure that it is a valid email."
+    echo "Exiting..."
+    exit 1
+fi
+
+# Verifies that the ip address is a valid ip address.
+if [[ ! ($IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
+  echo "IP address is invalid, Please check your ip address and try again"
+  echo "Exiting..."
+  exit 1
+fi
+
 echo "TESTING MAVEN project..."
 mvn package
 if [ $? -ne 0 ]; then

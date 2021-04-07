@@ -25,12 +25,10 @@ fi
 
 # Verifies that the ip address is a valid ip address.
 if [[ ! ($IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
-  echo "IP address is invalid, Please check your IPV4 address and try again"
+  echo "IP address is invalid, Please check your ip address and try again"
   echo "Exiting..."
   exit 1
 fi
-
-
 
 echo "TESTING MAVEN project..."
 mvn package

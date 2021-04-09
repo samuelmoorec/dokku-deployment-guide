@@ -52,13 +52,38 @@ echo "Connecting to Server..."
 echo "You may be prompted to verify if you would like to continue connecting to the server."
 echo "If prompted to continue type 'yes'."
 
+
 ssh root@$IPADDRESS bash << setup_dokku
 
-echo "Installing dokku mysql plugin..."
-dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
+echo "Adding swap partition...
+fallocate -l 3G /swapfile
+dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+echo "Successfully added 3G swap partition."
 
-echo "Installing dokku letsencrypt plugin..."
-dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
+
+echo "Checking for dokku mysql plugin..."
+if [ ! -d "/var/lib/dokku/plugins/enabled/mysql" ];
+  then
+    echo "mysql plugin not found."
+    echo "Installing dokku mysql plugin..."
+    dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
+  else
+    echo "mysql plugin found."
+fi
+
+echo "Checking for dokku letsencrypt plugin..."
+if [ ! -d "/var/lib/dokku/plugins/enabled/letsencrypt" ];
+  then
+    echo "letsencrypt plugin not found."
+    echo "Installing dokku letsencrypt plugin..."
+    dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
+  else
+    echo "letsencrypt plugin found."
+fi
 
 echo "Creating dokku app..."
 dokku apps:create $APP_NAME

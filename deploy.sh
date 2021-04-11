@@ -1,11 +1,20 @@
 #!/bin/bash
 # example
+<<<<<<< HEAD
 # ./deploy.sh domain appname email ip
 DOMAIN=$1
 APP_NAME=$2
 EMAIL=$3
 DB_NAME=$2-mysql
 IPADDRESS=$4
+=======
+# ./deploy.sh example.com example email@example.com
+read -p $'Enter the domain name (without http or www): ' DOMAIN
+read -p $'Name of the application (in lowercase): ' APP_NAME
+read -p $'Email Address: ' EMAIL
+read -p $'Enter the servers ip address: ' IP_ADDRESS
+DB_NAME="${APP_NAME}_db"
+>>>>>>> 160545371f49214895307a2679e2e78795266e5c
 
 # Verifies that app name is a valid name and wont cause failures later.
 if [[ ! ($APP_NAME =~ ^[a-z_]+$) ]] || [[ ! ($APP_NAME =~ ^[a-z].*)  ]]; then
@@ -25,6 +34,7 @@ fi
 
 # Verifies that the ip address is a valid ip address.
 if [[ ! ($IPADDRESS =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
+
   echo "IP address is invalid, Please check your ip address and try again"
   echo "Exiting..."
   exit 1
@@ -77,7 +87,7 @@ echo "You may be prompted to verify if you would like to continue connecting to 
 echo "If prompted to continue type 'yes'."
 
 
-ssh root@$IPADDRESS bash << setup_dokku
+ssh root@$IP_ADDRESS bash << setup_dokku
 
 echo "Adding swap partition..."
 fallocate -l 3G /swapfile
@@ -119,7 +129,7 @@ echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
 
 echo "Adding app environment variables..."
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDL_AUTO=update SPRING_JPA_SHOW_SQL=true
+dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDL_AUTO=update SPRING_JPA_SHOW_SQL=true spring_mail_host=smtp.mailtrap.io spring_mail_port=25 spring_mail_username=username spring_mail_password=password spring_mail_properties_mail_smtp_auth=true spring_mail_properties_mail_smtp_starttls_enable=true spring_mail_from=no-reply@$DOMAIN
 
 echo "Adding domain to dokku app..."
 dokku domains:add $APP_NAME $DOMAIN
@@ -136,10 +146,16 @@ dokku letsencrypt:auto-renew $APP_NAME
 echo "EXITING server..."
 setup_dokku
 
-echo "Adding dokku remote..."
-#MYSQL_ROOT_PASSWORD=$(ssh root@${IPADDRESS} cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD)
-git remote add dokku dokku@$IPADDRESS:$APP_NAME
-[[ $? -eq 0 ]] && echo "Dokku git remote created. Committing the system.properties file and running git push dokku master."
+echo "Adding production remote..."
+#MYSQL_ROOT_PASSWORD=$(ssh root@${IP_ADDRESS} cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD)
+git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
+[[ $? -eq 0 ]] && echo "Production remote created. Committing the system.properties file and running git push production main/master."
 git add system.properties
-git commit -m "feat: Added system.properties for deployment"
-git push dokku master
+git commit -m "feat: adds system.properties file for deployment"
+main_exists=$(git branch --list main)
+if [[ ${main_exists} ]];
+then
+  git push dokku main:master
+else
+  git push dokku master
+fi

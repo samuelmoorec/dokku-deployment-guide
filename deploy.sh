@@ -1,6 +1,6 @@
 #!/bin/bash
 # example
-# ./deploy.sh example.com example email@example.com
+# ./deploy.sh domain appname email ip
 DOMAIN=$1
 APP_NAME=$2
 EMAIL=$3
@@ -24,10 +24,34 @@ then
 fi
 
 # Verifies that the ip address is a valid ip address.
-if [[ ! ($IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
+if [[ ! ($IPADDRESS =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
   echo "IP address is invalid, Please check your ip address and try again"
   echo "Exiting..."
   exit 1
+fi
+
+if [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IPADDRESS) -eq 200 ]]; then
+echo "We will now open your browser to a dokku setup page."
+echo "click the blue button on the bottom that reads 'Finish Setup'."
+echo "DO NOT CHANGE ANYTHING IN THE FIELDS!"
+echo "After you click the button you will be redirected"
+echo "Once redirected come back to this terminal to continue."
+read -p "Press ENTER to open the page."
+open http://$IPADDRESS
+read -p "Press ENTER when you have clicked the 'Finish Setup' button."
+
+echo "Checking for dokku setup page status..."
+
+  while [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IPADDRESS) -eq 200 ]];
+    do
+      echo "It appears the dokku setup page is still active."
+      echo "Please verify that you clicked the 'Finish Setup' Button"
+      echo "and that the page was then redirected"
+      read -p "After you have confirmed that the dokku setup page is not longer present press Enter to continue."
+  done
+
+echo "Successfully submitted dokku setup page."
+
 fi
 
 echo "TESTING MAVEN project..."
@@ -55,7 +79,7 @@ echo "If prompted to continue type 'yes'."
 
 ssh root@$IPADDRESS bash << setup_dokku
 
-echo "Adding swap partition...
+echo "Adding swap partition..."
 fallocate -l 3G /swapfile
 dd if=/dev/zero of=/swapfile bs=1024 count=1048576
 chmod 600 /swapfile

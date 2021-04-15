@@ -68,7 +68,7 @@ server is to do the following
 6. Click the "Create Record" button
 ## Deploy Your Spring Application
 
-We have created a simple script to deploy your applications to your server using dokku. To deploy your application run the following command in your project's integrated terminal after **switching** out the **YOUR_DOMAIN**, **IP_ADDRESS**, **APP_NAME**, and **YOUR_EMAIL** with your own values.
+We have created a simple script to deploy your applications to your server using dokku. To deploy your application run the following command in your project's integrated terminal.
 ```
-bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/deploy.sh) YOUR_DOMAIN APP_NAME YOUR_EMAIL IP_ADDRESS
+bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/deploy.sh)
 ```

@@ -1,58 +1,78 @@
 #!/bin/bash
 # example
-<<<<<<< HEAD
-# ./deploy.sh domain appname email ip
-DOMAIN=$1
-APP_NAME=$2
-EMAIL=$3
-DB_NAME=$2-mysql
-IPADDRESS=$4
-=======
+
 # ./deploy.sh example.com example email@example.com
 read -p $'Enter the domain name (without http or www): ' DOMAIN
+
 read -p $'Name of the application (in lowercase): ' APP_NAME
+  while [[ ! ($APP_NAME =~ ^[a-z_]+$) ]] || [[ ! ($APP_NAME =~ ^[a-z].*) ]];
+    do
+      echo "Application name must start with a lowercase letter and can only consist of lowercase letters and underscores."
+      echo "Please enter a valid application name when prompted."
+      read -p $'Name of the application (in lowercase): ' APP_NAME
+  done
+
+  echo "Application Name set as: $APP_NAME"
+
 read -p $'Email Address: ' EMAIL
-read -p $'Enter the servers ip address: ' IP_ADDRESS
+  while [[ ! ($EMAIL =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$) ]];
+    do
+      echo "Invalid email"
+      echo "Please check and re-enter your email when prompted"
+      read -p $'Email Address: ' EMAIL
+  done
+
+  echo "Email set as: $EMAIL"
+
+
+read -p $'Enter the servers (droplet) ip address: ' IP_ADDRESS
+  while [[ ! ($IP_ADDRESS =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]];
+    do
+      echo "IP address is invalid, Please check your ip address and try again when prompted."
+      read -p $'Enter your servers (droplet) ip address: ' IP_ADDRESS
+  done
+
+  echo "Server IPV4 address set as: $IP_ADDRESS"
+
 DB_NAME="${APP_NAME}_db"
->>>>>>> 160545371f49214895307a2679e2e78795266e5c
 
 # Verifies that app name is a valid name and wont cause failures later.
-if [[ ! ($APP_NAME =~ ^[a-z_]+$) ]] || [[ ! ($APP_NAME =~ ^[a-z].*)  ]]; then
-    echo "App name must start with a lowercase letter and can only consist of lowercase letters and underscores."
-    echo "Please review your app name and run the command again."
-    echo "Exiting..."
-    exit 1
-fi
+#if [[ ! ($APP_NAME =~ ^[a-z_]+$) ]] || [[ ! ($APP_NAME =~ ^[a-z].*)  ]]; then
+#    echo "App name must start with a lowercase letter and can only consist of lowercase letters and underscores."
+#    echo "Please review your app name and run the command again."
+#    echo "Exiting..."
+#    exit 1
+#fi
 
 # Verifies that the email is a valid email.
-if [[ ! ($EMAIL =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$) ]]
-then
-    echo "Please check your email to make sure that it is a valid email."
-    echo "Exiting..."
-    exit 1
-fi
+#if [[ ! ($EMAIL =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$) ]]
+#then
+#    echo "Please check your email to make sure that it is a valid email."
+#    echo "Exiting..."
+#    exit 1
+#fi
 
 # Verifies that the ip address is a valid ip address.
-if [[ ! ($IPADDRESS =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
+#if [[ ! ($IP_ADDRESS =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
+#
+#  echo "IP address is invalid, Please check your ip address and try again"
+#  echo "Exiting..."
+#  exit 1
+#fi
 
-  echo "IP address is invalid, Please check your ip address and try again"
-  echo "Exiting..."
-  exit 1
-fi
-
-if [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IPADDRESS) -eq 200 ]]; then
+if [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IP_ADDRESS) -eq 200 ]]; then
 echo "We will now open your browser to a dokku setup page."
 echo "click the blue button on the bottom that reads 'Finish Setup'."
 echo "DO NOT CHANGE ANYTHING IN THE FIELDS!"
 echo "After you click the button you will be redirected"
 echo "Once redirected come back to this terminal to continue."
 read -p "Press ENTER to open the page."
-open http://$IPADDRESS
+open http://$IP_ADDRESS
 read -p "Press ENTER when you have clicked the 'Finish Setup' button."
 
 echo "Checking for dokku setup page status..."
 
-  while [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IPADDRESS) -eq 200 ]];
+  while [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IP_ADDRESS) -eq 200 ]];
     do
       echo "It appears the dokku setup page is still active."
       echo "Please verify that you clicked the 'Finish Setup' Button"
@@ -147,12 +167,13 @@ echo "EXITING server..."
 setup_dokku
 
 echo "Adding production remote..."
-#MYSQL_ROOT_PASSWORD=$(ssh root@${IP_ADDRESS} cat /var/lib/dokku/services/mysql/$DB_NAME/ROOTPASSWORD)
 git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
 [[ $? -eq 0 ]] && echo "Production remote created. Committing the system.properties file and running git push production main/master."
 git add system.properties
 git commit -m "feat: adds system.properties file for deployment"
+
 main_exists=$(git branch --list main)
+
 if [[ ${main_exists} ]];
 then
   git push dokku main:master

@@ -1,6 +1,33 @@
 #!/bin/bash
 # example
-
+ask() {
+    local prompt default reply
+    if [[ ${2:-} = 'Y' ]]; then
+        prompt='Y/n'
+        default='Y'
+    elif [[ ${2:-} = 'N' ]]; then
+        prompt='y/N'
+        default='N'
+    else
+        prompt='y/n'
+        default=''
+    fi
+    while true; do
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$1 [$prompt] "
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read -r reply </dev/tty
+        # Default?
+        if [[ -z $reply ]]; then
+            reply=$default
+        fi
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+    done
+}
 # ./deploy.sh example.com example email@example.com
 read -p $'Enter the domain name (without http or www): ' DOMAIN
 
@@ -34,31 +61,19 @@ read -p $'Enter the servers (droplet) ip address: ' IP_ADDRESS
 
   echo "Server IPV4 address set as: $IP_ADDRESS"
 
+MAILTRAPUSERNAME="username"
+
+MAILTRAPPASSWORD="password"
+
+if ask "Are you using the mailtrap service for emailing?";
+then
+    read -p $'Enter your mailtrap username: ' MAILTRAPUSERNAME
+
+    read -p $'Enter your mailtrap password: ' MAILTRAPPASSWORD
+
+fi
+
 DB_NAME="${APP_NAME}_db"
-
-# Verifies that app name is a valid name and wont cause failures later.
-#if [[ ! ($APP_NAME =~ ^[a-z_]+$) ]] || [[ ! ($APP_NAME =~ ^[a-z].*)  ]]; then
-#    echo "App name must start with a lowercase letter and can only consist of lowercase letters and underscores."
-#    echo "Please review your app name and run the command again."
-#    echo "Exiting..."
-#    exit 1
-#fi
-
-# Verifies that the email is a valid email.
-#if [[ ! ($EMAIL =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$) ]]
-#then
-#    echo "Please check your email to make sure that it is a valid email."
-#    echo "Exiting..."
-#    exit 1
-#fi
-
-# Verifies that the ip address is a valid ip address.
-#if [[ ! ($IP_ADDRESS =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$) ]]; then
-#
-#  echo "IP address is invalid, Please check your ip address and try again"
-#  echo "Exiting..."
-#  exit 1
-#fi
 
 if [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IP_ADDRESS) -eq 200 ]]; then
 echo "We will now open your browser to a dokku setup page."
@@ -149,7 +164,7 @@ echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
 
 echo "Adding app environment variables..."
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDL_AUTO=update SPRING_JPA_SHOW_SQL=true spring_mail_host=smtp.mailtrap.io spring_mail_port=2525 spring_mail_username=username spring_mail_password=password spring_mail_properties_mail_smtp_auth=true spring_mail_properties_mail_smtp_starttls_enable=true spring_mail_from=no-reply@$DOMAIN
+dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDL_AUTO=update SPRING_JPA_SHOW_SQL=true spring_mail_host=smtp.mailtrap.io spring_mail_port=2525 spring_mail_username=$MAILTRAPUSERNAME spring_mail_password=$MAILTRAPPASSWORD spring_mail_properties_mail_smtp_auth=true spring_mail_properties_mail_smtp_starttls_enable=true spring_mail_from=no-reply@$DOMAIN
 
 echo "Adding domain to dokku app..."
 dokku domains:add $APP_NAME $DOMAIN

@@ -19,16 +19,43 @@
 #for env_item in ${ARRAY[@]}; do
 #  echo $env_item
 #done
-IP=$1
-echo "We will now open your browser to a dokku setup page."
-echo "click the blue button on the bottom that reads 'Finish Setup'."
-echo "DO NOT CHANGE ANYTHING IN THE FIELDS!"
-echo "After you click the button you will be redirected"
-read -p "Press RETURN or ENTER to open the page."
-#open http://$IP
-if [[ $(curl -o /dev/null -s -w "%{http_code}" http://$IP) -eq 200 ]]; then
-    echo "site is still up"
+
+ask() {
+    local prompt default reply
+    if [[ ${2:-} = 'Y' ]]; then
+        prompt='Y/n'
+        default='Y'
+    elif [[ ${2:-} = 'N' ]]; then
+        prompt='y/N'
+        default='N'
     else
-      echo "site is no longer up"
+        prompt='y/n'
+        default=''
+    fi
+    while true; do
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$1 [$prompt] "
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read -r reply </dev/tty
+        # Default?
+        if [[ -z $reply ]]; then
+            reply=$default
+        fi
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+    done
+}
+MAILTRAPUSERNAME=username;
+
+
+if ask "Are you using the mail_trap service for emailing?";
+then
+    echo $MAILTRAPUSERNAME
+
+    else
+      echo not moving forward
 fi
 #curl -o /dev/null -s -w "%{http_code}" http://$IP

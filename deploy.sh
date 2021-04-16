@@ -124,14 +124,20 @@ echo "If prompted to continue type 'yes'."
 
 ssh root@$IP_ADDRESS bash << setup_dokku
 
-echo "Adding swap partition..."
-fallocate -l 3G /swapfile
-dd if=/dev/zero of=/swapfile bs=1024 count=1048576
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
-echo "Successfully added 3G swap partition."
+echo "Checking for swap partition"
+if [ ! -f "/swapfile" ];
+  then
+    echo "Adding swap partition..."
+    fallocate -l 3G /swapfile
+    dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+    echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+    echo "Successfully added 3G swap partition."
+  else
+    echo "swap partition found."
+fi
 
 
 echo "Checking for dokku mysql plugin..."
@@ -181,9 +187,9 @@ dokku letsencrypt:auto-renew $APP_NAME
 echo "EXITING server..."
 setup_dokku
 
-echo "Adding production remote..."
+echo "Adding remote for deployment..."
 git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
-[[ $? -eq 0 ]] && echo "Production remote created. Committing the system.properties file and running git push production main/master."
+[[ $? -eq 0 ]] && echo "Deployment remote created. Committing the system.properties file and running git push dokku main/master."
 git add system.properties
 git commit -m "feat: adds system.properties file for deployment"
 

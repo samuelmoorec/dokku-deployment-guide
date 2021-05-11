@@ -13,3 +13,26 @@ spring.jpa.hibernate.ddl-auto=update
 enviroment variable
 SPRING_JPA_HIBERNATE_DDLAUTO=update
 ```
+If we are using an api key in our `application.properties` with our own naming convention it is not required to change the variable name unless it contains any `.`. The period character is considered numeric, so we are not able to put this in an environment variable name.
+## Adding environment variables in dokku
+To add an environment variable to our application in dokku we just have to use the following command from our server
+```
+config:set <app> <enviroment_variable_and_value>
+```
+Here is an example of how we would add an environment variable to our spring_blog application.
+```
+#Example
+
+dokku config:set spring_blog SPRING_JPA_HIBERNATE_DDLAUTO=update
+```
+## Adding multiple variables at once
+If we needed to add multiple variables to our application and don't want to add them one at a time we can also use the `config:set` command to set multiple environment variables  at once. To add multiple environment variables at once use the following command from the server.
+```
+config:set <app> <first_enviroment_variable> <second_enviroment_variable> ect...
+```
+Here is an example of how we would add multiple environment variables to our spring_blog application.
+```
+#Example
+
+dokku config:set spring_blog filestack_api_key=aue392hljH3jl3ka SPRING_JPA_HIBERNATE_DDLAUTO=update
+```

@@ -1,4 +1,4 @@
-#FAQ
+# FAQ
 
 ## How to connect to server
 If we are trying to connect to our server to run dokku commands or any other commands that we would need to run on our server we need to remote into our server. To remote into our server is actually quite easy all we have to do is run one of the following command switching out the ip address or domain with our own ip address or domain.
@@ -18,6 +18,8 @@ ssh root@135.23.1.14
 ssh root@<domain>
 ```
 Here is an example of the use below.
+
+ 
 
 ```
 #Example

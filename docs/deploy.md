@@ -100,7 +100,7 @@ git push dokku main:master
 ```
 ### Pushing master branch
 ```
-git push dokku main
+git push dokku master
 ```
 
 ## Conclusion

@@ -66,9 +66,42 @@ server is to do the following
 4. For "Is an Alias Of", enter `@`
 5. Set TTL to 60
 6. Click the "Create Record" button
-## Deploy Your Spring Application
+## Initially Deploying Your Spring Application
 
-We have created a simple script to deploy your applications to your server using dokku. To deploy your application run the following command in your project's integrated terminal.
+There are a few things that we need to make sure are done before we can run the script below.
+
+- We are running this script from our project's directory
+- Our are on branch `main` or `master`
+- Our application runs (meaning that our spring application can build and run without errors)
+- Our domain's `A record` must be pointing at out server's ip address.
+
+We have created a simple script to deploy your applications to your server using dokku. To deploy your application run the following command in your project's integrated terminal. You will need to have the following pieces of information ready when you run the script below as you will be prompted for this information.
+- app name
+- email
+- domain 
+- server's ip address
+- (optional) mailtrap credentials
 ```
 bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/deploy.sh)
 ```
+After we have run the script above and have completed the deployment process we will see our domain's url in the terminal that we ran the script from. We should be able to click on the link to go to our live site. If we see a blue screen saying that there was an error there is a good chance that our application is just still in the process of building. If the blue screen does not go away we can find troubleshooting guides [here](https://cloud.digitalocean.com/networking).
+
+## Pushing changes to already deployed application
+Once you have deployed your application you are going to occasionally want to update your live application. To do this we just need to verify a couple of things.
+
+- main branch is up to date and stable
+- main branch has all changes committed
+
+Once everything is in order we can push our code to our server through git. To do this we just have to run one of the following commands
+
+### Pushing main branch
+```
+git push dokku main:master
+```
+### Pushing master branch
+```
+git push dokku master
+```
+
+## Conclusion
+As we have made it to the bottom of the guide our app should be live. We now have an effective and easy way to push our new code to our server as we continue to build on our project. This guide is only to get our application deployed there are many features and commands that we can learn about to help us with managing our application on the server. To continue learning more about this tool we can find more guides [here](https://github.com/gocodeup/dokku-deployment-guide/blob/master/README.md#readme). 

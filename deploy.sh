@@ -170,7 +170,7 @@ echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
 
 echo "Adding app environment variables..."
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDL_AUTO=update SPRING_JPA_SHOW_SQL=true spring_mail_host=smtp.mailtrap.io spring_mail_port=2525 spring_mail_username=$MAILTRAPUSERNAME spring_mail_password=$MAILTRAPPASSWORD spring_mail_properties_mail_smtp_auth=true spring_mail_properties_mail_smtp_starttls_enable=true spring_mail_from=no-reply@$DOMAIN
+dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDLAUTO=update SPRING_JPA_SHOWSQL=true spring_mail_host=smtp.mailtrap.io spring_mail_port=2525 spring_mail_username=$MAILTRAPUSERNAME spring_mail_password=$MAILTRAPPASSWORD spring_mail_properties_mail_smtp_auth=true spring_mail_properties_mail_smtp_starttls_enable=true spring_mail_from=no-reply@$DOMAIN
 
 echo "Adding domain to dokku app..."
 dokku domains:add $APP_NAME $DOMAIN

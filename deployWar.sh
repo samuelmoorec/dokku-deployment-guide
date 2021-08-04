@@ -122,6 +122,7 @@ echo "Connecting to Server..."
 echo "You may be prompted to verify if you would like to continue connecting to the server."
 echo "If prompted to continue type 'yes'."
 
+MYSQLROOTPASSWORD=notPassword
 
 ssh root@$IP_ADDRESS bash << setup_dokku
 

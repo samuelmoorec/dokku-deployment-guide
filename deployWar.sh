@@ -140,7 +140,6 @@ if [ ! -f "/swapfile" ];
     echo "swap partition found."
 fi
 
-
 echo "Checking for dokku mysql plugin..."
 if [ ! -d "/var/lib/dokku/plugins/enabled/mysql" ];
   then
@@ -167,19 +166,19 @@ dokku apps:create $APP_NAME
 echo "Creating mysql service on dokku container..."
 dokku mysql:create $DB_NAME
 
-echo "Attempting to setup db"
-dokku mysql:connect $DB_NAME << dbSetup
-$MYSQLSETUPSCRIPT
-dbSetup
-
 echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
 
 echo "Fetching mysql service root password..."
-MYSQLROOTPASSWORD=$(cat $(dokku mysql:info backend_movies_db | awk '/Service root/ {print $3}')/ROOTPASSWORD)
+MYSQLROOTPASSWORD=$(cat $(dokku mysql:info $DB_NAME | awk '/Service root/ {print $3}')/ROOTPASSWORD)
 
 echo "Adding app environment variables..."
 dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL DATABASE_USER=root DATABASE_USER_PASSWORD=$MYSQLROOTPASSWORD
+
+echo "Attempting to setup db"
+dokku mysql:connect $DB_NAME << dbSetup
+$MYSQLSETUPSCRIPT
+dbSetup
 
 echo "Adding domain to dokku app..."
 dokku domains:add $APP_NAME $DOMAIN
@@ -200,7 +199,8 @@ echo "Adding remote for deployment..."
 git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
 [[ $? -eq 0 ]] && echo "Deployment remote created. Committing the system.properties file and running git push dokku main/master."
 git add system.properties
-git commit -m "feat: adds system.properties file for deployment"
+git add Procfile
+git commit -m "feat: adds system.properties, and Procfile for deployment"
 
 main_exists=$(git branch --list main)
 

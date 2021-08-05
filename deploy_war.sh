@@ -175,7 +175,7 @@ dokku mysql:link $DB_NAME $APP_NAME
 setup_dokku
 
 echo "Fetching mysql service root password..."
-MYSQLROOTPASSWORD=$(ssh root@$IP_ADDRESS "echo \$(cat \$(echo \$(dokku mysql:info movie_db --service-root)/ROOTPASSWORD | cut -d ":" -f2))")
+MYSQLROOTPASSWORD=$(ssh root@$IP_ADDRESS "echo \$(cat \$(echo \$(dokku mysql:info $DB_NAME --service-root)/ROOTPASSWORD | cut -d ":" -f2))")
 
 ssh root@$IP_ADDRESS bash << continue_setup_dokku
 
@@ -207,7 +207,7 @@ echo "checking for dokku remote..."
 if git remote | grep dokku > /dev/null;
 then
   echo "dokku remote found, removing it..."
-  git remove remove dokku
+  git remote remove dokku
   else
   echo "dokku remote not found..."
 fi

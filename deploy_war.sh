@@ -167,17 +167,23 @@ dokku apps:create $APP_NAME
 echo "Creating mysql service on dokku container..."
 dokku mysql:create $DB_NAME
 
+echo "Exposing mysql service with random port..."
+dokku mysql:expose $DB_NAME
+
 echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
+setup_dokku
 
 echo "Fetching mysql service root password..."
-MYSQLROOTPASSWORD=$(cat $(dokku mysql:info $DB_NAME | awk '/Service root/ {print $3}')/ROOTPASSWORD)
+MYSQLROOTPASSWORD=$(ssh root@$IP_ADDRESS "echo \$(cat \$(echo \$(dokku mysql:info movie_db --service-root)/ROOTPASSWORD | cut -d ":" -f2))")
+
+ssh root@$IP_ADDRESS bash << continue_setup_dokku
 
 echo "Adding app environment variables..."
 dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL DATABASE_USER=root DATABASE_USER_PASSWORD=$MYSQLROOTPASSWORD
 
 echo "Attempting to setup db"
-dokku mysql:connect $DB_NAME << dbSetup
+dokku mysql:connect $DB_NAME <<- dbSetup
 $MYSQLSETUPSCRIPT
 dbSetup
 
@@ -194,14 +200,27 @@ echo "Setting cron job to renew HTTPS..."
 dokku letsencrypt:auto-renew $APP_NAME
 
 echo "EXITING server..."
-setup_dokku
+continue_setup_dokku
 
-echo "Adding remote for deployment..."
-git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
+echo "checking for dokku remote..."
+
+if git remote | grep dokku > /dev/null;
+then
+  echo "dokku remote found, removing it..."
+  git remove remove dokku
+  else
+  echo "dokku remote not found..."
+fi
+
+  echo "creating dokku remote..."
+  git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
+
 [[ $? -eq 0 ]] && echo "Deployment remote created. Committing the system.properties file and running git push dokku main/master."
 git add system.properties
 git add Procfile
 git commit -m "feat: adds system.properties, and Procfile for deployment"
+
+
 
 main_exists=$(git branch --list main)
 

@@ -172,18 +172,13 @@ dokku mysql:expose $DB_NAME
 
 echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
-setup_dokku
-
-echo "Fetching mysql service root password..."
-MYSQLROOTPASSWORD=$(ssh root@$IP_ADDRESS "echo \$(cat \$(echo \$(dokku mysql:info $DB_NAME --service-root)/ROOTPASSWORD | cut -d ":" -f2))")
-
-ssh root@$IP_ADDRESS bash << continue_setup_dokku
 
 echo "Adding app environment variables..."
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL DATABASE_USER=root DATABASE_USER_PASSWORD=$MYSQLROOTPASSWORD
+dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL DATABASE_USER=root DATABASE_USER_PASSWORD=\$(echo \$(cat \$(echo \$(dokku mysql:info $DB_NAME --service-root)/ROOTPASSWORD | cut -d ":" -f2)))
 
 echo "Attempting to setup db"
-dokku mysql:connect $DB_NAME <<- dbSetup
+dokku mysql:connect $DB_NAME << dbSetup
+USE $BDNAME;
 $MYSQLSETUPSCRIPT
 dbSetup
 
@@ -200,7 +195,7 @@ echo "Setting cron job to renew HTTPS..."
 dokku letsencrypt:auto-renew $APP_NAME
 
 echo "EXITING server..."
-continue_setup_dokku
+setup_dokku
 
 echo "checking for dokku remote..."
 

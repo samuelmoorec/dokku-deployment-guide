@@ -59,3 +59,16 @@ Here is an example of the use below.
 
 bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/addssh.sh) 123.12.3.241 codeytheduck
 ```
+
+## How to give server push access
+If we want to be able to push our main branch up to the server, and we were not the one who originally deployed, we just need to run the following command replacing the example name with your first name, and the ip address with your servers ip address, or your site's domain name.
+```
+bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/add_deployment_ssh.sh) <ip_address> <name>
+```
+Here is an example of the use below.
+
+```
+#Example
+
+bash <(curl -sS https://raw.githubusercontent.com/gocodeup/dokku-deployment-guide/master/add_deployment_ssh.sh) 123.12.3.241 synthia
+```

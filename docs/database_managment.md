@@ -1,7 +1,7 @@
 # Dokku Database Management
 This guide is to help you with the basic database management from creating to a database to deleting it. This guide will currently only be covering for Dokku's mysql plugin.
 ### Installing MySQL plugin
-To get us started when working with databases in Dokku we first have to install the mysql plugin. This is required when working with any exertanal database in Dokku. To install the plugin you can ssh into your server and run the following command.
+To get us started when working with databases in Dokku we first have to install the mysql plugin. This is required when working with any external database in Dokku. To install the plugin you can ssh into your server and run the following command.
 ```
 sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
 ```

@@ -61,17 +61,6 @@ read -p $'Enter the servers (droplet) ip address: ' IP_ADDRESS
 
   echo "Server IPV4 address set as: $IP_ADDRESS"
 
-MAILTRAPUSERNAME="username"
-
-MAILTRAPPASSWORD="password"
-
-if ask "Are you using the mailtrap service for emailing?";
-then
-    read -p $'Enter your mailtrap username: ' MAILTRAPUSERNAME
-
-    read -p $'Enter your mailtrap password: ' MAILTRAPPASSWORD
-
-fi
 
 DB_NAME="${APP_NAME}_db"
 
@@ -113,14 +102,27 @@ if [ -f system.properties ];
   then
     echo "system.properties file found"
   else
-    echo "java.runtime.version=11" > system.properties
+    echo 'java.runtime.version=11' > system.properties
     [[ $? -eq 0 ]] && echo "system.properties created"
 fi
+
+echo "Checking for Procfile file..."
+if [ -f Procfile ];
+  then
+    echo "Procfile file found"
+  else
+    echo 'web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/*.war' > Procfile
+    [[ $? -eq 0 ]] && echo "Procfile created"
+fi
+
+echo "Setting mysql file as variable"
+MYSQLSETUPSCRIPT=$(cat src/main/resources/*.sql)
 
 echo "Connecting to Server..."
 echo "You may be prompted to verify if you would like to continue connecting to the server."
 echo "If prompted to continue type 'yes'."
 
+MYSQLROOTPASSWORD=notPassword
 
 ssh root@$IP_ADDRESS bash << setup_dokku
 
@@ -138,7 +140,6 @@ if [ ! -f "/swapfile" ];
   else
     echo "swap partition found."
 fi
-
 
 echo "Checking for dokku mysql plugin..."
 if [ ! -d "/var/lib/dokku/plugins/enabled/mysql" ];
@@ -166,11 +167,20 @@ dokku apps:create $APP_NAME
 echo "Creating mysql service on dokku container..."
 dokku mysql:create $DB_NAME
 
+echo "Exposing mysql service with random port..."
+dokku mysql:expose $DB_NAME
+
 echo "Linking dokku app and mysql service..."
 dokku mysql:link $DB_NAME $APP_NAME
 
 echo "Adding app environment variables..."
-dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL SPRING_JPA_HIBERNATE_DDLAUTO=update SPRING_JPA_SHOWSQL=true spring_mail_host=smtp.mailtrap.io spring_mail_port=2525 spring_mail_username=$MAILTRAPUSERNAME spring_mail_password=$MAILTRAPPASSWORD spring_mail_properties_mail_smtp_auth=true spring_mail_properties_mail_smtp_starttls_enable=true spring_mail_from=no-reply@$DOMAIN
+dokku config:set --no-restart "$APP_NAME" DOKKU_LETSENCRYPT_EMAIL=$EMAIL DATABASE_USER=root DATABASE_USER_PASSWORD=\$(echo \$(cat \$(echo \$(dokku mysql:info $DB_NAME --service-root)/ROOTPASSWORD | cut -d ":" -f2)))
+
+echo "Attempting to setup db"
+dokku mysql:connect $DB_NAME << dbSetup
+USE $BDNAME;
+$MYSQLSETUPSCRIPT
+dbSetup
 
 echo "Adding domain to dokku app..."
 dokku domains:add $APP_NAME $DOMAIN
@@ -187,11 +197,25 @@ dokku letsencrypt:auto-renew $APP_NAME
 echo "EXITING server..."
 setup_dokku
 
-echo "Adding remote for deployment..."
-git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
+echo "checking for dokku remote..."
+
+if git remote | grep dokku > /dev/null;
+then
+  echo "dokku remote found, removing it..."
+  git remote remove dokku
+  else
+  echo "dokku remote not found..."
+fi
+
+  echo "creating dokku remote..."
+  git remote add dokku dokku@$IP_ADDRESS:$APP_NAME
+
 [[ $? -eq 0 ]] && echo "Deployment remote created. Committing the system.properties file and running git push dokku main/master."
 git add system.properties
-git commit -m "feat: adds system.properties file for deployment"
+git add Procfile
+git commit -m "feat: adds system.properties, and Procfile for deployment"
+
+
 
 main_exists=$(git branch --list main)
 

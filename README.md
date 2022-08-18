@@ -1,5 +1,5 @@
 # Dokku Deployment
-This is a guide for deploying and doing all things Dokku. This repo will consist of mutiple markdown files built for helping you learn what Dokku is and how to use this tool.
+This is a series of guides for deploying and maintaining your Capstone project's online presence with Dokku. This repo will consist of multiple markdown files built for helping you learn what Dokku is and some key aspects of utilizing it.
 
 ## Documentation
 

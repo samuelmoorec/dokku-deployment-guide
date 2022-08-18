@@ -3,8 +3,10 @@ This is a series of guides for deploying and maintaining your Capstone project's
 
 ## Documentation
 
-- All in one deployment Guide can be found [here](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/deploy.md#readme).
-- Basic Deployment Concepts can be found [here](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/deployment_basics.md#readme).
-- Environment Variables guide can be found [here](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/enviroment_variables.md#readme)
-- Database management guide can be found [here](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/database_managment.md#readme).
-- FAQ can be found [here](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/faq.md#readme).
+What are you looking for?
+
+- [An Introduction to Deployment](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/deployment_basics.md#readme)
+- [The full deployment walkthrough](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/deploy.md#readme)
+- [How to get server access and error logs](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/faq.md#readme)
+- [How to configure environment variables](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/enviroment_variables.md#readme)
+- [How to setup and manage my website's database](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/database_managment.md#readme)

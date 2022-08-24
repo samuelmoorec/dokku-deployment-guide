@@ -5,7 +5,7 @@ This is a series of guides for deploying and maintaining your Capstone project's
 
 What are you looking for?
 
-- [An Introduction to Deployment](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/deployment_basics.md#readme)
+- [An Introduction to Deployment](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/introduction_to_deployment.md#readme)
 - [The full deployment walkthrough](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/deploy.md#readme)
 - [How to get server access and error logs](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/faq.md#readme)
 - [How to configure environment variables](https://github.com/gocodeup/dokku-deployment-guide/blob/main/docs/enviroment_variables.md#readme)

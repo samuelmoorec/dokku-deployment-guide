@@ -2,7 +2,7 @@
 This is your go-to guide if you want to deploy you Spring Boot App from start to finish all in one sitting.
 
 ## NameCheap Domain setup
-For this guide we will be using [NameCheap](https://www.namecheap.com/) to set up our domain. The domain we will be using for example purposes will be `exampledomain.com` throughout this documentation we will be using this domain to help you understand how to use your own domain.
+For this guide we will be using [NameCheap](https://www.namecheap.com/) to set up our domain. The domain we will be using for example purposes will be `exampledomain.com` throughout this documentation. We will be using this domain to help you understand how to use your own domain.
 
 1. Login / register on [namecheap.com](https://www.namecheap.com/)
 2. Purchase domain ***Note: this can be a $1 domain, it does not have to be expensive***
@@ -19,11 +19,11 @@ ns3.digitalocean.com
 7. Click green checkmark to save changes
 
 ## Digital Ocean Server Setup
-1. Login / register on [digitalocean.com](https://cloud.digitalocean.com/)
+1. Register on [digitalocean](https://try.digitalocean.com/freetrialoffer/) and login
 3. Click the green **Create** Button -> [Droplets](https://cloud.digitalocean.com/droplets/new)
 4. Under ***Choose an image*** select the tab **Marketplace**.
 5. In the search bar search for ***"Dokku"*** .
-6. Select the option with the smiling teal whale. After it is selected it should show **Dokku** *X.XX.X* **on Ubuntu**.
+6. Select the relevant search result - What you're looking for should look similar to **Dokku** *X.XX.X* **on Ubuntu**.
 7. Under Choose a plan make sure that Basic is Selected.
 8. For **CPU options** select ***Regular Intel with SSD***.
 9. For the plan choose ***$5/mo*** plan *it should be the cheapest plan*.

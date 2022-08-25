@@ -8,9 +8,9 @@ Our set-up script should handle the initial plugin install, but the command to d
 sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
 ```
 
-### 
+### What this document covers
 
-The set-up script we use covers creating a database, linking that database, and getting that initial configuration squared away. The rest of this document will show you how to connect to that database, grab your ROOT password that was generated, and a link to find the rest of the plug-in's documentation for further commands.
+The set-up script we use covers creating a database, linking that database, and getting that initial configuration squared away. The rest of this document will show you how to connect to that database, grab your ROOT password that was generated, and a link to find the rest of the plug-in's documentation for further commands and reading.
 
 ### Connecting To MySQL Prompt
 To do queries in our Dokku database we just need to run a command while logged in to our server:

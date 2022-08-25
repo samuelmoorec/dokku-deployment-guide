@@ -1,5 +1,18 @@
 # Dokku environment variables
-This guide is for setting environment variables specific to your application. This guide will be helpful for setting variables that our `application.properties` would normaly handle.
+This guide is for setting environment variables specific to your application. This guide will be helpful for setting variables that our `application.properties` would normally handle.
+
+
+### ~Important Note~
+
+Do not add ***any*** of the following from your `application.properties` to your Dokku server environment variables:
+
+* `spring.datasource.url`
+* `spring.datasource.username`
+* `spring.datasource.password`
+
+Those are perfect for telling our *local machine* where our database is and how to access it as an admin, but that information is not relevant or valid for the database on our server.
+
+
 ## What are environment variables?
 Before we can get started on adding environment variables to our application we first need to know what they are. Ultimately environment variables are just variables that you set in your system. These can often be used to make your life easier or hold important system info. A good example of this is if we needed to change our current director to our home directory we could just use the command `cd $HOME` and we would be taken to our home directory. You can find more on environment variables [here](https://medium.com/chingu/an-introduction-to-environment-variables-and-how-to-use-them-f602f66d15fa#:~:text=An%20environment%20variable%20is%20a,at%20a%20point%20in%20time.)
 ## SpringBoot environment variables

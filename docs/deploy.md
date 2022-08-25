@@ -122,3 +122,5 @@ git push dokku master
 
 ## Conclusion
 As we have made it to the bottom of the guide our app should be live. We now have an effective and easy way to push our new code to our server as we continue to build on our project. This guide is only to get our application deployed there are many features and commands that we can learn about to help us with managing our application on the server. To continue learning more about this tool we can find more guides [here](https://github.com/gocodeup/dokku-deployment-guide/blob/main/README.md#readme). 
+
+We recommend moving into setting up your **environment variables** 

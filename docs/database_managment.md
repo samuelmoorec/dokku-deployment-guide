@@ -1,45 +1,19 @@
 # Dokku Database Management
-This guide is to help you with the basic database management from creating to a database to deleting it. This guide will currently only be covering for Dokku's mysql plugin.
-### Installing MySQL plugin
-To get us started when working with databases in Dokku we first have to install the mysql plugin. This is required when working with any external database in Dokku. To install the plugin you can ssh into your server and run the following command.
+This guide is to help you with the basic database management from creating to a database to deleting it. This guide will currently only be covering for Dokku's [MySql plugin](https://github.com/dokku/dokku-mysql).
+### The Dokku MySQL plugin
+We use a MySQL plugin with Dokku to work with our database. This is required when working with any external database in Dokku. 
+
+Our set-up script should handle the initial plugin install, but the command to do so again or fresh is:
 ```
 sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql
 ```
-### Creating MySQL Database
-To Create a database all we need to do is run a command from your server.
-```
-mysql:create <database_name>
-```
-Here is an example of how one could use the command above for your spring blog application.
-```
-#Example
 
-dokku mysql:create spring_blog_db
-```
-#### Setting root password
-If we want to use a custom root password for our mysql service we can use a specific flag `-r` to do so. Be warned that this will be **less secure** as the password will not have been randomly generated. On the command down below you will notice there is a `-r`, this is what we refer to as a flag.
-```
-mysql:create <database_name> -r <custom_root_password>
-```
-Here is an example of how you would create a spring blog db with a custom root password.
-```
-#Example
+### 
 
-dokku mysql:create spring_blog_db -r customRootPassword
-```
-### Connecting Database to Application
-When we want to connect *"or link"* our database to a specific application we have to run a command the following command from our server.
-```
-mysql:link <database_name> <app>
-```
-Here is an example of how one would link their database to their already existing dokku app.
-```
-#Example
+The set-up script we use covers creating a database, linking that database, and getting that initial configuration squared away. The rest of this document will show you how to connect to that database, grab your ROOT password that was generated, and a link to find the rest of the plug-in's documentation for further commands.
 
-dokku mysql:link spring_blog_db spring_blog_app
-```
 ### Connecting To MySQL Prompt
-To do queries in our dokku database we just need to run a command from the Server
+To do queries in our Dokku database we just need to run a command while logged in to our server:
 ```
 mysql:connect <database_name>
 ```
@@ -49,7 +23,7 @@ Here is an example of how one would enter their database.
 
 dokku mysql:connect spring_blog_db
 ```
-##### MySQL : Connect Important Note
+##### Finding the ROOT password 
 When you log-in to your mysql database using the command above you will only have read access and **will not** be able to create, edit, delete anything.
 <br />
 *This means we cannot create addition databases or manually insert data into our databases.*

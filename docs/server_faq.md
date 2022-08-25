@@ -1,4 +1,4 @@
-# Server access and logs
+# Server access and server logs
 
 This document contains code for connecting to your server, grabbing live or past error logs, and how to share access to other team members. 
 

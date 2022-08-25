@@ -1,11 +1,17 @@
 # Did you say deploying?
-Deploying and deployment - these terms may be new, but deployment is a common topic in our industry. While we don't have an entire module dedicated to deploying, it is important to know what deployment is. It is worth noting that if you work for a larger company this will be a whole job on its own - on the other hand, if you work at a start-up this may be something you handle as part of a developer role. Deployment is a large topic of discussion on its own, so we don't go too deep into it. This guide will help you understand the fundamentals of deploying and how a specific type of server works with your application.
+Deploying and deployment - these terms may be new, but deployment is a common topic in our industry. While we don't have an entire module dedicated to deploying, it is important to know what deployment is.
+
+It is worth noting that if you work for a larger company this will be a whole job on its own - on the other hand, if you work at a start-up this may be something you handle as part of a developer role.
+
+Deployment is a large topic of discussion on its own, so we don't go too deep into it. This guide will help you understand the fundamentals of deploying and how a specific type of server works with your Capstone application.
 
 ## What is deploying?
 Up until this point we have only run applications on our own machines on what we call 'localhost' (e.g., 'http://localhost:8080/ads/all'). Deploying is when we take the necessary steps to put our application on a server while setting up any additional services we need to run that application successfully.
 
 ## What is a server?
-In simple terms a server is a computer just like mine or yours, but there are some things that differentiate from our computers and a server. You might have heard the term 'dedicated server' - that is just referring to the fact that our servers aim to have no down-time or unscheduled periods of being offline. This means from the moment we boot up the server, we theoretically won't have to turn off our server. Well, now you might be thinking  *"could I just set up a computer at home and use it as a server and just never turn it off?"*. The simple answer is 'yes, you can', but *should* you do that? Let's look at some reasons why it is much more common to use 3rd party companies to handle this task for us.
+In simple terms a server is a computer just like mine or yours, but there are some things that differentiate from our computers and a server. You might have heard the term 'dedicated server' - that is just referring to the fact that our servers aim to have no down-time or unscheduled periods of being offline. This means from the moment we boot up the server, we theoretically won't have to turn off our server.
+
+Well, now you might be thinking  *"could I just set up a computer at home and use it as a server and just never turn it off?"*. The simple answer is 'yes, you can', but *should* you do that? Let's look at some reasons why it is much more common to use 3rd party companies to handle this task for us.
 
 ## What makes a server special?
 There are a few reasons we pay companies to host servers for our applications. The first reason is what we mentioned in the last section - servers are dedicated and have minimal downtime if any downtime at all. The responsibility of maintaining that dedicated uptime and any backup servers for emergencies is both time-intensive and expensive to handle.

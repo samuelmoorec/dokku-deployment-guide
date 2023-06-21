@@ -155,7 +155,7 @@ echo "Adding domain to dokku app..."
 dokku domains:add $APP_NAME $DOMAIN www.$DOMAIN
 
 echo "Removing default domain from app..."
-dokku domains:remove $APP_NAME $APP_NAME
+dokku domains:remove $APP_NAME $APP_NAME $APP_NAME.$APP_NAME-droplet
 
 echo "Setting letsencrypt email..."
 dokku letsencrypt:set $APP_NAME email $EMAIL

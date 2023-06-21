@@ -115,6 +115,9 @@ if [ ! -f "/swapfile" ];
     echo "swap partition found."
 fi
 
+echo "Setting global vhosts..."
+dokku domains:set-global $APP_NAME-droplet
+
 
 echo "Checking for dokku mysql plugin..."
 if [ ! -d "/var/lib/dokku/plugins/enabled/mysql" ];
